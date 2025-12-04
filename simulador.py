@@ -1,11 +1,38 @@
 import matplotlib.pyplot as plt
 
-def calcular_enfriamiento(t_inicial, t_ambiente, k, tiempo_total):
-    """
-    Función para calcular la temperatura usando la Ley de Newton
-    y el Método de Euler.
-    """
-    # Aquí irá la lógica matemática
+def calcular_enfriamiento(t_inicial, t_ambiente, k, tiempo_total, paso_tiempo=!):
+   
+"""
+se aplica el Metodo de Euler para simular el enfriamiento.
+ retorna dos listas: tiempos y temperaturas.
+"""
+    
+# listas para guardar el historial
+    
+tiempos = [0] temperaturas = [t_inicial]
+temperaturas = [t_inicial]
+
+# variables acumuladoras 
+t_actual = t_inicial
+tiempo_actual = 0
+
+#bucle principal
+while tiempo_actual < tiempo_total:
+    # 1. calcular la derivada 
+    derivada = -k * (t_actual - t_ambiente)
+    # 2. calcular el cambio 
+    cambio = derivada * paso_tiempo
+    #3. actualizar valores
+    t_actual += cambio
+    tiempo_actual += paso_tiempo
+    #4. guardar en listas
+    tiempos.append(tiempo_actual)
+    temperaturas.append(t_actual)
+    
+return tiempos, temperaturas
+    
+
+
     pass
 
 def graficar_datos(tiempos, temperaturas):
