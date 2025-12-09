@@ -4,7 +4,6 @@ def calcular_enfriamiento(t_inicial, t_ambiente, k, tiempo_total, paso_tiempo):
     # --- Lógica Matemática ---
     tiempos = [0]
     temperaturas = [t_inicial]
-
     t_actual = t_inicial
     tiempo_actual = 0
 
@@ -19,39 +18,52 @@ def calcular_enfriamiento(t_inicial, t_ambiente, k, tiempo_total, paso_tiempo):
         
     return tiempos, temperaturas
 
-def graficar_datos(tiempos, temperaturas):
-    
-    plt.plot(tiempos, temperaturas, label="Curva de Enfriamiento", color="blue")
-    plt.title("Simulación de Ley de Enfriamiento de Newton")
-    plt.xlabel("Tiempo (segundos)") 
-    plt.ylabel("Temperatura (°C)")  
-    plt.axhline(y=temperaturas[-1], color='r', linestyle='--', label=f"Temp Final: {temperaturas[-1]:.2f}°C")
-    plt.legend() 
-    plt.grid(True)
-    plt.show()
-
 def main():
-    print("--- Simulador de Enfriamiento (Cumpliendo RF) ---")
-    try:
-        # --- Entradas  ---
-        t_ini = float(input("Temp. Inicial objeto (°C): "))
-        t_amb = float(input("Temp. Ambiente (°C): "))
-        k = float(input("Constante k: "))
-        total = int(input("Tiempo total (segundos): "))
-        dt = float(input("Paso de tiempo/Delta t (ej. 1): "))
+    print("--- Simulador Multi-Escenario (Comparativo RF3.3) ---")
+    
+    # Gráfica
+    plt.figure(figsize=(10, 6))
+    plt.title("Comparación de Enfriamiento: Múltiples Escenarios")
+    plt.xlabel("Tiempo (segundos)")
+    plt.ylabel("Temperatura (°C)")
+    plt.grid(True)
+    
+    contador_escenarios = 1
+    continuar = True
+    
+    while continuar:
+        try:
+            print(f"\n--- Escenario #{contador_escenarios} ---")
+            nombre = input("Nombre del objeto (ej. Café, Metal): ")
+            t_ini = float(input("Temp. Inicial objeto (°C): "))
+            t_amb = float(input("Temp. Ambiente (°C): "))
+            k = float(input("Constante k (ej. 0.05): "))
+            total = int(input("Tiempo total (segundos): "))
+            dt = float(input("Paso de tiempo (ej. 1): "))
             
-        print("\nCalculando...")
-        eje_x, eje_y = calcular_enfriamiento(t_ini, t_amb, k, total, dt)
-
-        print(f"Simulación finalizada.")
-        print(f"Temperatura final: {eje_y[-1]:.2f} °C")
-        
-        # --- Visualización ---
-        print("Generando gráfica...")
-        graficar_datos(eje_x, eje_y)
-
-    except ValueError:
-        print("Error: Ingresa solo números válidos.")
+            # Calcular
+            eje_x, eje_y = calcular_enfriamiento(t_ini, t_amb, k, total, dt)
+            
+            # Agregar curva a la gráfica
+            etiqueta = f"{nombre} (k={k}, Ti={t_ini})"
+            plt.plot(eje_x, eje_y, label=etiqueta)
+            
+            print(f"-> Escenario {nombre} procesado.")
+            
+            # Preguntar si quiere otro
+            respuesta = input("\n¿Agregar otro escenario a la gráfica? (s/n): ").lower()
+            if respuesta != 's':
+                continuar = False
+            else:
+                contador_escenarios += 1
+                
+        except ValueError:
+            print("Error: Ingresa números válidos.")
+    
+    # Al final de todo, mostramos la gráfica completa
+    print("\nGenerando gráfica comparativa...")
+    plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
     main()
